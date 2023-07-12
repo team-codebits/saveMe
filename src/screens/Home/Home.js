@@ -3,28 +3,28 @@ import React, { useEffect } from "react";
 import { View, Text } from "react-native";
 
 import styles from "./styles.js";
-import { calcularSomaValores } from "../../utils/calculaSaldo.js";
-import { useExtratoStore } from "../../stores/ExtratoStore.js";
+import { calculateSumValues } from "../../utils/calculateBalance.js";
+import { useExtractStore } from "../../stores/ExtractStore.js";
 
-export default function Home({ saldoVisivel }) {
-  const extrato = useExtratoStore((state) => state.extrato);
-  const fetchExtrato = useExtratoStore((state) => state.fetchExtrato);
+export default function Home({ visibleBalance }) {
+  const extract = useExtractStore((state) => state.extract);
+  const fetchExtract = useExtractStore((state) => state.fetchExtract);
 
   useEffect(() => {
-    fetchExtrato();
+    fetchExtract();
   }, []);
 
-  let saldoValor = calcularSomaValores(extrato);
+  let saldoValor = calculateSumValues(extract);
 
-  if (saldoVisivel === false) {
-    saldo = <Text style={styles.textSaldo}>R$ {saldoValor}</Text>;
+  if (visibleBalance === false) {
+    balance = <Text style={styles.textSaldo}>US$ {saldoValor}</Text>;
   } else {
-    saldo = <Text style={styles.textSaldo}>R$ * * * * *</Text>;
+    balance = <Text style={styles.textSaldo}>US$ * * * * *</Text>;
   }
   return (
     <View style={styles.container}>
       <View style={styles.container}>
-        <View style={styles.innerContainer}>{saldo}</View>
+        <View style={styles.innerContainer}>{balance}</View>
       </View>
     </View>
   );

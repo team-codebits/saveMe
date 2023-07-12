@@ -3,24 +3,24 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import Home from "../screens/Home/Home.js";
-import { AdicionarRoute } from "./AdicionarConta.js";
-import { ExtratoRoute } from "./ExtratoRoute.js";
+import { AddRoute } from "./AddAccount.js";
+import { ExtractRoute } from "./ExtractRoute.js";
 
-import Adicionar from "../screens/Adicionar/Adicionar";
+import Add from "../screens/Add/Add";
 import { LogoTitle } from "../components/LogoTitle.js";
 
 import HomeIcon from "../assets/home.svg";
-import ExtratoIcon from "../assets/extrato.svg";
-import ContasIcon from "../assets/contas.svg";
+import ExtratoIcon from "../assets/extract.svg";
+import ContasIcon from "../assets/accounts.svg";
 import AddIcon from "../assets/add.svg";
 
 const Tab = createBottomTabNavigator();
 
 export function MainRoute() {
-  const [saldoVisivel, setSaldoVisivel] = useState(false);
+  const [visibleBalance, setVisibleBalance] = useState(false);
 
-  const handleToggleSaldo = () => {
-    setSaldoVisivel(!saldoVisivel);
+  const handleToggleBalance = () => {
+    setVisibleBalance(!visibleBalance);
   };
   return (
     <NavigationContainer>
@@ -38,11 +38,11 @@ export function MainRoute() {
             switch (route.name) {
               case "Home":
                 return <HomeIcon width={24} height={24} />;
-              case "Extrato":
+              case "Extract":
                 return <ExtratoIcon width={24} height={24} />;
-              case "Contas":
+              case "Accounts":
                 return <ContasIcon width={24} height={24} />;
-              case "Adicionar":
+              case "Add":
                 return <AddIcon width={24} height={24} />;
               default:
                 return null;
@@ -62,30 +62,30 @@ export function MainRoute() {
               fontWeight: "bold",
             },
             headerTitle: (props) => (
-              <LogoTitle onToggleSaldo={handleToggleSaldo} {...props} />
+              <LogoTitle onToggleBalance={handleToggleBalance} {...props} />
             ),
           }}
         >
-          {(props) => <Home saldoVisivel={saldoVisivel} {...props} />}
+          {(props) => <Home visibleBalance={visibleBalance} {...props} />}
         </Tab.Screen>
-        <Tab.Screen name="Extrato" 
+        <Tab.Screen name="Extract" 
           options={{
               headerStyle:{backgroundColor:"#2196f3"},
               headerTintColor: "#fff"
               }}
-          component={ExtratoRoute} />
-        <Tab.Screen name="Contas"
+          component={ExtractRoute} />
+        <Tab.Screen name="Accounts"
           options={{
             headerStyle:{backgroundColor:"#2196f3"},
             headerTintColor: "#fff"
             }}
-          component={AdicionarRoute} />
-        <Tab.Screen name="Adicionar" 
+          component={AddRoute} />
+        <Tab.Screen name="Add" 
           options={{
             headerStyle:{backgroundColor:"#2196f3"},
             headerTintColor: "#fff"
             }}
-          component={Adicionar} />
+          component={Add} />
       </Tab.Navigator>
     </NavigationContainer>
   );
