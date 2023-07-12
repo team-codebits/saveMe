@@ -11,52 +11,52 @@ import ShowIcon from "../assets/show.svg";
 import ExportIcon from "../assets/export.svg";
 import EditIcon from "../assets/edit.svg";
 
-const defaultName = "usuário";
+const defaultName = "user";
 
-const exportarDados = () => {
+const exportData = () => {
   Alert.alert(
-    "Exportar PDF",
-    "Você deseja exportar os dados do app?",
+    "Export PDF",
+    "Do you really want to export the app data?",
     [
       {
-        text: "Não",
+        text: "No",
       },
-      //AQUI A CONFIRMAÇÃO DE EXPORTAR PDF VAI FECHAR O APP, SUBSTITUA PELA FUNÇÃO DE EXPORTAÇÃO DE PDF
-      { text: "Sim", onPress: () => BackHandler.exitApp() },
+      //HERE THE PDF EXPORT CONFIRMATION WILL CLOSE THE APP, REPLACE IT WITH THE PDF EXPORT FUNCTION
+      { text: "Yes", onPress: () => BackHandler.exitApp() },
     ],
     { cancelable: false }
   );
 };
 
-const fecharApp = () => {
+const closeApp = () => {
   Alert.alert(
-    "Fechar aplicativo",
-    "Você deseja sair do aplicativo?",
+    "Close app",
+    "Do yout want to exit the app?",
     [
       {
-        text: "Não",
+        text: "No",
         onPress: () => console.log("Cancel Pressed"),
         style: "cancel",
       },
-      { text: "Sim", onPress: () => BackHandler.exitApp() },
+      { text: "Yes", onPress: () => BackHandler.exitApp() },
     ],
     { cancelable: false }
   );
 };
 
-export function LogoTitle({ onToggleSaldo }) {
-  const [nomeUsuario, setNomeUsuario] = useState("");
-  const [nomeUsuarioEditavel, setNomeUsuarioEditavel] = useState(false);
+export function LogoTitle({ onToggleBalance }) {
+  const [userName, setUserName] = useState("");
+  const [editableUserName, setUserNameEditable] = useState(false);
 
   useEffect(() => {
     const getUserNameFromStorage = async () => {
       try {
-        const storedName = await AsyncStorage.getItem("nomeUsuario");
-        if (storedName !== null) setNomeUsuario(storedName);
-        else setNomeUsuario(defaultName);
+        const storedName = await AsyncStorage.getItem("userName");
+        if (storedName !== null) setUserName(storedName);
+        else setUserName(defaultName);
       } catch (error) {
         console.error(
-          "Erro ao obter o nome do usuário do AsyncStorage:",
+          "Error getting user name from AsyncStorage:",
           error
         );
       }
@@ -64,43 +64,43 @@ export function LogoTitle({ onToggleSaldo }) {
     getUserNameFromStorage();
   }, []);
 
-  const editarNomeUsuario = () => {
-    setNomeUsuarioEditavel(true);
+  const editUserName = () => {
+    setUserNameEditable(true);
   };
 
-  const salvarNomeUsuario = async () => {
+  const saveUserName = async () => {
     try {
-      await AsyncStorage.setItem("nomeUsuario", nomeUsuario.trim());
+      await AsyncStorage.setItem("userName", userName.trim());
       console.log("Nome do usuário salvo com sucesso!");
     } catch (error) {
-      console.log("Erro ao salvar o nome do usuário:", error);
+      console.log("Erro ao salvar o name do usuário:", error);
     }
   };
 
-  const salvarNomeEditado = () => {
-    if (nomeUsuario.trim() !== "") {
-      setNomeUsuarioEditavel(false);
-      salvarNomeUsuario();
+  const saveEditedName = () => {
+    if (userName.trim() !== "") {
+      setUserNameEditable(false);
+      saveUserName();
     }
   };
 
-  let nomeUsuarioComponente;
-  if (nomeUsuarioEditavel) {
-    nomeUsuarioComponente = (
-      <View style={styles.nomeUsuarioEditavel}>
+  let userNameComponent;
+  if (editableUserName) {
+    userNameComponent = (
+      <View style={styles.editableUserName}>
         <TextInput
           style={styles.input}
-          placeholder="Digite seu nome"
-          value={nomeUsuario}
-          onChangeText={(text) => setNomeUsuario(text)}
-          onBlur={salvarNomeEditado}
+          placeholder="Digite seu name"
+          value={userName}
+          onChangeText={(text) => setUserName(text)}
+          onBlur={saveEditedName}
           autoFocus
         />
       </View>
     );
   } else {
-    nomeUsuarioComponente = (
-      <Text style={styles.text}>Olá, {nomeUsuario}!</Text>
+    userNameComponent = (
+      <Text style={styles.text}>Hello, {userName}!</Text>
     );
   }
   return (
@@ -120,10 +120,10 @@ export function LogoTitle({ onToggleSaldo }) {
       >
         <AppIcon width={24} height={24} color={"#000000"} />
 
-        {nomeUsuarioComponente}
+        {userNameComponent}
 
         <TouchableOpacity
-          onPress={editarNomeUsuario}
+          onPress={editUserName}
           style={{ flexDirection: "row", alignItems: "center" }}
         >
           <EditIcon width={24} height={24} />
@@ -138,21 +138,21 @@ export function LogoTitle({ onToggleSaldo }) {
         }}
       >
         <TouchableOpacity
-          onPress={onToggleSaldo}
+          onPress={onToggleBalance}
           style={{ flexDirection: "row", alignItems: "center" }}
         >
           <ShowIcon width={24} height={24} />
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={exportarDados}
+          onPress={exportData}
           style={{ flexDirection: "row", alignItems: "center", padding: 5 }}
         >
           <ExportIcon width={24} height={24} />
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={fecharApp}
+          onPress={closeApp}
           style={{ flexDirection: "row", alignItems: "center" }}
         >
           <ExitIcon width={24} height={24} />
