@@ -58,13 +58,13 @@ function AddBankAccount({ navigation }) {
       />
       <TextInput
         style={styles.input}
-        placeholder="bank"
+        placeholder="Bank"
         value={bank}
         onChangeText={(text) => setbank(text)}
       />
       <TextInput
         style={styles.input}
-        placeholder="balance"
+        placeholder="Balance"
         value={balance}
         onChangeText={(text) => setbalance(text)}
       />

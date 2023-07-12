@@ -6,19 +6,19 @@ import { getCards } from "../utils/storageCards";
 export const useCardStore = create((set) => ({
   listCards: [],
   fetchCards: async () => {
-    const cartoes = await getCards();
-    set({ listCards: cartoes });
+    const cards = await getCards();
+    set({ listCards: cards });
   },
 }));
 
 export const useAccountsCardStore = create((set) => ({
   listAccountsCards: [],
   fetchAccountsCards: async () => {
-    const contas = await getAccounts();
-    const cartoes = await getCards();
+    const accounts = await getAccounts();
+    const cards = await getCards();
 
-    const contasCartoes = [...contas, ...cartoes];
+    const accountsCards = [...accounts, ...cards];
 
-    set({ listAccountsCards: contasCartoes });
+    set({ listAccountsCards: accountsCards });
   },
 }));

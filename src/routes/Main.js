@@ -11,7 +11,7 @@ import { LogoTitle } from "../components/LogoTitle.js";
 
 import HomeIcon from "../assets/home.svg";
 import ExtratoIcon from "../assets/extract.svg";
-import ContasIcon from "../assets/contas.svg";
+import ContasIcon from "../assets/accounts.svg";
 import AddIcon from "../assets/add.svg";
 
 const Tab = createBottomTabNavigator();
