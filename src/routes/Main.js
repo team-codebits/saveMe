@@ -3,16 +3,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import Home from "../screens/Home/Home.js";
-import { AddRoute } from "./AddAccount.js";
+import { AddRoute } from "./RouteAccounts.js";
 import { ExtractRoute } from "./ExtractRoute.js";
 
-import Add from "../screens/Add/Add";
 import { LogoTitle } from "../components/LogoTitle.js";
 
 import HomeIcon from "../assets/home.svg";
 import ExtratoIcon from "../assets/extract.svg";
 import ContasIcon from "../assets/accounts.svg";
-import AddIcon from "../assets/add.svg";
 
 const Tab = createBottomTabNavigator();
 
@@ -42,8 +40,6 @@ export function MainRoute() {
                 return <ExtratoIcon width={24} height={24} />;
               case "Accounts":
                 return <ContasIcon width={24} height={24} />;
-              case "Add":
-                return <AddIcon width={24} height={24} />;
               default:
                 return null;
             }
@@ -80,12 +76,6 @@ export function MainRoute() {
             headerTintColor: "#fff"
             }}
           component={AddRoute} />
-        <Tab.Screen name="Add" 
-          options={{
-            headerStyle:{backgroundColor:"#2196f3"},
-            headerTintColor: "#fff"
-            }}
-          component={Add} />
       </Tab.Navigator>
     </NavigationContainer>
   );

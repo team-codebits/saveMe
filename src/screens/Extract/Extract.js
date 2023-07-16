@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import React, { useEffect } from "react";
+import { View, Text } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { View, Text, ScrollView } from "react-native";
-
-import styles from "./styles.js";
-import { getRevenuesAndExpenses } from "../../utils/storage.js";
+import AddIcon from "../../assets/add.svg";
+import styles from "../../styles/listsStyle";
 import { useExtractStore } from "../../stores/ExtractStore.js";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import AddTransaction from "../../components/Forms/AddTransaction";
 
 export default function Extracts() {
   const navigation = useNavigation();
@@ -28,44 +26,53 @@ export default function Extracts() {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <View>
-          {extract.map((transaction, index) => {
-            return (
-              <View key={index}>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("ExtractDetail", { transaction, index });
-                  }}
-                >
-                  <View style={styles.transaction}>
-                    <Text style={styles.extract}>
-                      {transaction.name}
-                      {"\n"}
-                      <Text
-                        style={
-                          transaction.selectedOption === "revenue"
-                            ? styles.revenue
-                            : styles.expense
-                        }
-                      >
-                        {"US$"}
-                        {transaction.value}
-                      </Text>
-                    </Text>
+      {extract.map((transaction, index) => {
+        return (
+          <View key={index}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("DetailTransaction", {
+                  transaction,
+                  index,
+                });
+              }}
+            >
+              <View style={styles.item}>
+                <Text style={styles.item__leftText}>
+                  {transaction.name}
+                  {"\n"}
+                  <Text
+                    style={
+                      transaction.selectedOption === "revenue"
+                        ? styles.item__leftText$$revenue
+                        : styles.item__leftText$$expense
+                    }
+                  >
+                    {"US$"}
+                    {transaction.value}
+                  </Text>
+                </Text>
 
-                    <Text style={styles.dataStyle}>
-                      {transaction.date.getDate()}/{transaction.date.getMonth()}/
-                      {transaction.date.getFullYear()}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-                <View style={styles.me}></View>
+                <Text style={styles.item__date}>
+                  {transaction.date.getDate()}/{transaction.date.getMonth()}/
+                  {transaction.date.getFullYear()}
+                </Text>
               </View>
-            );
-          })}
-        </View>
-      </ScrollView>
+            </TouchableOpacity>
+            <View style={styles.divider}></View>
+          </View>
+        );
+      })}
+      <View style={styles.addButtonContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() =>
+            navigation.navigate("FormsScreen", { component: <AddTransaction /> })
+          }
+        >
+          <AddIcon width={24} height={24} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

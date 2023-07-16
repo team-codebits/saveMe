@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Button, ScrollView, Alert } from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, Button, ScrollView, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import styles from "./styles";
 import { removeAccounts } from "../../utils/storageAccounts";
 import { useExtractStore } from "../../stores/ExtractStore.js";
 
-const DetailBankAccount = ({ route, navigation }) => {
+const DetailAccount = ({ route, navigation }) => {
   const { account, index } = route.params;
 
   const extract = useExtractStore((state) => state.extract);
@@ -54,7 +54,7 @@ const DetailBankAccount = ({ route, navigation }) => {
       <View style={styles.buttonsView}>
         <Button
           title="Edit"
-          onPress={() => navigation.navigate("EditBankAccount", { account })}
+          onPress={() => navigation.navigate("EditAccount", { account })}
         ></Button>
         <Button
           color="red"
@@ -117,4 +117,4 @@ const DetailBankAccount = ({ route, navigation }) => {
   );
 };
 
-export default DetailBankAccount;
+export default DetailAccount;

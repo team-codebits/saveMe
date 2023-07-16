@@ -1,32 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { Picker } from "@react-native-picker/picker";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  Button,
+} from "react-native";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-import styles from "./styles.js";
-import { addRevenuesAndExpenses } from "../../utils/storage.js";
-import { useAccountsCardStore } from "../../stores/CardsStore.js";
+import styles from "../../styles/stylesForms.js";
+import { updateRevenuesAndExpenses } from "../../utils/storage.js";
 
-export default function Form() {
-  const [name, setName] = useState("");
-  const [value, setValue] = useState("");
-  const [type, setType] = useState("");
-  const [account, setAccount] = useState("");
-  const [selectedOption, setSelectedOption] = useState(null);
-
-  const [date, setDate] = useState(new Date(Date.now()));
+export default function EditTransaction({ route, navigation }) {
+  const { transaction, index } = route.params;
+  const [name, setName] = useState(transaction.name);
+  const [value, setValue] = useState(transaction.value.toString());
+  const [type, setType] = useState(transaction.type);
+  const [account, setAccount] = useState(transaction.account);
+  const [date, setDate] = useState(transaction.date);
+  const [selectedOption, setSelectedOption] = useState(transaction.selectedOption);
   const [show, setShow] = useState(false);
-
-  const listAccountsCards = useAccountsCardStore(
-    (state) => state.listAccountsCards
-  );
-  const fetchAccountsCards = useAccountsCardStore(
-    (state) => state.fetchAccountsCards
-  );
-
-  useEffect(() => {
-    fetchAccountsCards();
-  }, []);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -38,39 +32,33 @@ export default function Form() {
     setShow(true);
   };
 
+  useEffect(() => {
+    if (transaction) {
+      setName(transaction.name);
+      setValue(transaction.value);
+      setType(transaction.type);
+      setAccount(transaction.account);
+      setDate(transaction.date);
+      setSelectedOption(transaction.selectedOption);
+    }
+  }, [transaction]);
+
   const handleSelectedOption = (option) => {
     setSelectedOption(option);
   };
 
-  useEffect(() => {
-    if (Platform.OS === "android") {
-      setShow(false);
-    } else {
-      setShow(true);
-    }
-  }, []);
-
-  function resetForm() {
-    setName("");
-    setValue("");
-    setType("");
-    setAccount("");
-    setSelectedOption(null);
-    setDate(new Date(Date.now()));
-  }
-
-  function handleSubmit() {
+  async function handleSubmit() {
     if (
       name === "" ||
       value === "" ||
       account === "" ||
-      date === null ||
+      date === "" ||
       type === "" ||
       selectedOption === null ||
       !Number(value) ||
       Number(value) < 0
     ) {
-      Alert.alert("Fill in all fields validly!");
+      Alert.alert("Fill in all the fields");
       return;
     }
 
@@ -82,51 +70,53 @@ export default function Form() {
       date,
       selectedOption,
     };
-    addRevenuesAndExpenses(data);
 
-    resetForm();
+    console.log(data);
+
+    await updateRevenuesAndExpenses(index, data); // Call AsyncStorage's update function
+
+    onSave(data);
+
+    Alert.alert("Success", "Changes have been successfully saved!");
+
+    setName("");
+    setValue("");
+    setType("");
+    setAccount("");
+    setDate("");
+    setSelectedOption(null);
+
+    navigation.goBack();
   }
 
-  console.log(account)
-
   return (
-    <View>
+    <View style={styles.container}>
+      <Text style={styles.heading}>Edit Transaction</Text>
       <TextInput
         style={styles.input}
         value={name}
         placeholder="Name"
         onChangeText={setName}
       ></TextInput>
-
       <TextInput
         style={styles.input}
         value={value}
         placeholder="Value"
         onChangeText={setValue}
       ></TextInput>
-
       <TextInput
         style={styles.input}
         value={type}
         placeholder="Type"
         onChangeText={setType}
       ></TextInput>
-
-      <Text>Select the account: </Text>
-      <View style={styles.input}>
-        <Picker
-          selectedValue={listAccountsCards[0]}
-          onValueChange={(itemValue, itemIndex) => setAccount(itemValue)}
-        >
-          {listAccountsCards.map((item, index) => {
-            return (
-              <Picker.Item value={item.name} label={item.name} key={index} />
-            );
-          })}
-        </Picker>
-      </View>
-
-      <View style={styles.dateInput}>
+      <TextInput
+        style={styles.input}
+        value={account}
+        placeholder="Account"
+        onChangeText={setAccount}
+      ></TextInput>
+      <View>
         {Platform.OS === "android" && (
           <TouchableOpacity
             style={{ paddingVertical: 10, paddingLeft: 10 }}
@@ -183,9 +173,16 @@ export default function Form() {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.inputAdd} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Add</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonsView}>
+        <Button title="Save" onPress={handleSubmit} />
+        <Button
+          color="#757de8"
+          title="Back"
+          onPress={() => {
+            navigation.goBack();
+          }}
+        ></Button>
+      </View>
     </View>
   );
 }

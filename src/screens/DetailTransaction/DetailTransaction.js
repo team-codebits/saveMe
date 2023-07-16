@@ -4,18 +4,11 @@ import { View, Text, Button, Alert } from "react-native";
 import styles from "./styles.js";
 import { removeRevenuesAndExpenses } from "../../utils/storage.js";
 
-export default function ExtractDetail({ route, navigation }) {
+export default function DetailTransaction({ route, navigation }) {
   const { transaction, index } = route.params;
 
   const handleEdit = () => {
-    navigation.navigate("EditForm", { transaction, index });
-  };
-
-  console.log(transaction)
-
-  const handleSalvarEdicao = (data) => {
-    console.log("Data edited:", data);
-    // ...
+    navigation.navigate("EditTransaction", { transaction, index });
   };
 
   const dialogDeleteTransaction = (index) => {
@@ -53,7 +46,8 @@ export default function ExtractDetail({ route, navigation }) {
       </Text>
       <Text style={styles.text}>
         <Text style={styles.textBold}>Date: </Text>
-        {transaction.date.getDate()}/{transaction.date.getMonth()}/{transaction.date.getFullYear()}
+        {transaction.date.getDate()}/{transaction.date.getMonth()}/
+        {transaction.date.getFullYear()}
       </Text>
 
       <View style={styles.buttonsView}>
