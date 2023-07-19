@@ -1,26 +1,32 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  Button,
-} from "react-native";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import React, { useEffect, useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { Picker } from "@react-native-picker/picker";
 
-import styles from "./stylesForms.js";
-import { updateRevenuesAndExpenses } from "../../utils/storage.js";
+import styles from "../../styles/AddTransactionStyle";
+import { addRevenuesAndExpenses } from "../../utils/storage.js";
+import { useAccountsCardStore } from "../../stores/CardsStore.js";
 
-export default function EditForm({ route, navigation }) {
-  const { transaction, index } = route.params;
-  const [name, setName] = useState(transaction.name);
-  const [value, setValue] = useState(transaction.value.toString());
-  const [type, setType] = useState(transaction.type);
-  const [account, setAccount] = useState(transaction.account);
-  const [date, setDate] = useState(transaction.date);
-  const [selectedOption, setSelectedOption] = useState(transaction.selectedOption);
+export default function Form() {
+  const [name, setName] = useState("");
+  const [value, setValue] = useState("");
+  const [type, setType] = useState("");
+  const [account, setAccount] = useState("");
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const [date, setDate] = useState(new Date(Date.now()));
   const [show, setShow] = useState(false);
+
+  const listAccountsCards = useAccountsCardStore(
+    (state) => state.listAccountsCards
+  );
+  const fetchAccountsCards = useAccountsCardStore(
+    (state) => state.fetchAccountsCards
+  );
+
+  useEffect(() => {
+    fetchAccountsCards();
+  }, []);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -32,33 +38,39 @@ export default function EditForm({ route, navigation }) {
     setShow(true);
   };
 
-  useEffect(() => {
-    if (transaction) {
-      setName(transaction.name);
-      setValue(transaction.value);
-      setType(transaction.type);
-      setAccount(transaction.account);
-      setDate(transaction.date);
-      setSelectedOption(transaction.selectedOption);
-    }
-  }, [transaction]);
-
   const handleSelectedOption = (option) => {
     setSelectedOption(option);
   };
 
-  async function handleSubmit() {
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
+  }, []);
+
+  function resetForm() {
+    setName("");
+    setValue("");
+    setType("");
+    setAccount("");
+    setSelectedOption(null);
+    setDate(new Date(Date.now()));
+  }
+
+  function handleSubmit() {
     if (
       name === "" ||
       value === "" ||
       account === "" ||
-      date === "" ||
+      date === null ||
       type === "" ||
       selectedOption === null ||
       !Number(value) ||
       Number(value) < 0
     ) {
-      Alert.alert("Fill in all the fields");
+      Alert.alert("Fill in all fields validly!");
       return;
     }
 
@@ -70,53 +82,51 @@ export default function EditForm({ route, navigation }) {
       date,
       selectedOption,
     };
+    addRevenuesAndExpenses(data);
 
-    console.log(data);
-
-    await updateRevenuesAndExpenses(index, data); // Call AsyncStorage's update function
-
-    onSave(data);
-
-    Alert.alert("Success", "Changes have been successfully saved!");
-
-    setName("");
-    setValue("");
-    setType("");
-    setAccount("");
-    setDate("");
-    setSelectedOption(null);
-
-    navigation.goBack();
+    resetForm();
   }
 
+  console.log(account)
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Edit Transaction</Text>
+    <View>
       <TextInput
         style={styles.input}
         value={name}
         placeholder="Name"
         onChangeText={setName}
       ></TextInput>
+
       <TextInput
         style={styles.input}
         value={value}
         placeholder="Value"
         onChangeText={setValue}
       ></TextInput>
+
       <TextInput
         style={styles.input}
         value={type}
         placeholder="Type"
         onChangeText={setType}
       ></TextInput>
-      <TextInput
-        style={styles.input}
-        value={account}
-        placeholder="Account"
-        onChangeText={setAccount}
-      ></TextInput>
-      <View>
+
+      <Text>Select the account: </Text>
+      <View style={styles.input}>
+        <Picker
+          selectedValue={listAccountsCards[0]}
+          onValueChange={(itemValue, itemIndex) => setAccount(itemValue)}
+        >
+          {listAccountsCards.map((item, index) => {
+            return (
+              <Picker.Item value={item.name} label={item.name} key={index} />
+            );
+          })}
+        </Picker>
+      </View>
+
+      <View style={styles.dateInput}>
         {Platform.OS === "android" && (
           <TouchableOpacity
             style={{ paddingVertical: 10, paddingLeft: 10 }}
@@ -173,16 +183,9 @@ export default function EditForm({ route, navigation }) {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.buttonsView}>
-        <Button title="Save" onPress={handleSubmit} />
-        <Button
-          color="#757de8"
-          title="Back"
-          onPress={() => {
-            navigation.goBack();
-          }}
-        ></Button>
-      </View>
+      <TouchableOpacity style={styles.inputAdd} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>Add</Text>
+      </TouchableOpacity>
     </View>
   );
 }

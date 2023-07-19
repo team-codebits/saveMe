@@ -28,7 +28,20 @@ export default styles = StyleSheet.create({
     color: "white",
   },
   textSaldo: {
-  fontSize: 60,
-  color: "white",
-},
+    fontSize: 60,
+    color: "white",
+  },
+  button: {
+    borderRadius: 100,
+    height: 40,
+    width: 40,
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+    backgroundColor: "#1a7bd5",
+  },
+  addButtonContainer: {
+    alignItems: "center",
+    marginTop: 20,
+  },
 });

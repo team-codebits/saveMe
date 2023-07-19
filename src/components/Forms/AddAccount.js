@@ -3,9 +3,9 @@ import { View, Text, TextInput, Button, Alert } from "react-native";
 
 import { addAccounts } from "../../utils/storageAccounts.js";
 
-import styles from "./styles.js";
+import styles from "../../styles/styles";
 
-function AddBankAccount({ navigation }) {
+function AddAccount({ navigation }) {
   const [name, setName] = useState("");
   const [bank, setbank] = useState("");
   const [balance, setbalance] = useState(0.0);
@@ -77,16 +77,9 @@ function AddBankAccount({ navigation }) {
 
       <View style={styles.buttonsView}>
         <Button title="Add" onPress={handleAddAccount} />
-        <Button
-          color="#757de8"
-          title="Back"
-          onPress={() => {
-            navigation.goBack();
-          }}
-        ></Button>
       </View>
     </View>
   );
 }
 
-export default AddBankAccount;
+export default AddAccount;

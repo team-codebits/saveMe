@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Button } from "react-native";
 
+import styles from "../../styles/EditFormsStyle";
 import {updateAccounts} from "../../utils/storageAccounts";
 
-import styles from "./styles";
-
-const EditBankAccount = ({ route, navigation }) => {
+const EditAccount = ({ route, navigation }) => {
   const { index, account } = route.params;
   const [name, setName] = useState(account.name);
   const [bank, setBank] = useState(account.bank);
@@ -84,4 +83,4 @@ const EditBankAccount = ({ route, navigation }) => {
     </View>
   );
 };
-export default EditBankAccount;
+export default EditAccount;
