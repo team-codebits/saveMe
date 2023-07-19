@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 
-import styles from "../../styles/AddTransactionsStyle.js";
+import styles from "../../styles/AddTransactionStyle.js";
 
 export default function FormsScreen({ route }) {
   const { component } = route.params;

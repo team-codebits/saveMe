@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 
-import styles from "../../styles/AddTransactionsStyle";
+import styles from "../../styles/AddTransactionStyle";
 import { addRevenuesAndExpenses } from "../../utils/storage.js";
 import { useAccountsCardStore } from "../../stores/CardsStore.js";
 

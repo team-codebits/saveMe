@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Button } from "react-native";
 
+import styles from "../../styles/EditFormsStyle";
 import {updateAccounts} from "../../utils/storageAccounts";
-
-import styles from "../../styles/Editstyles";
 
 const EditAccount = ({ route, navigation }) => {
   const { index, account } = route.params;

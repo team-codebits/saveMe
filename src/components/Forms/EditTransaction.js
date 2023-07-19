@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-import styles from "../../styles/stylesForms.js";
+import styles from "../../styles/EditFormsStyle.js"
 import { updateRevenuesAndExpenses } from "../../utils/storage.js";
 
 export default function EditTransaction({ route, navigation }) {

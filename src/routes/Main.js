@@ -64,18 +64,22 @@ export function MainRoute() {
         >
           {(props) => <Home visibleBalance={visibleBalance} {...props} />}
         </Tab.Screen>
-        <Tab.Screen name="Extract" 
+        <Tab.Screen
+          name="Extract"
           options={{
-              headerStyle:{backgroundColor:"#2196f3"},
-              headerTintColor: "#fff"
-              }}
-          component={ExtractRoute} />
-        <Tab.Screen name="Accounts"
+            headerStyle: { backgroundColor: "#2196f3" },
+            headerTintColor: "#fff",
+          }}
+          component={ExtractRoute}
+        />
+        <Tab.Screen
+          name="Accounts"
           options={{
-            headerStyle:{backgroundColor:"#2196f3"},
-            headerTintColor: "#fff"
-            }}
-          component={AddRoute} />
+            headerStyle: { backgroundColor: "#2196f3" },
+            headerTintColor: "#fff",
+          }}
+          component={AddRoute}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
